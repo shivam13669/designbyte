@@ -159,8 +159,11 @@ function showProjects(projects) {
 
 }
 
+let allSkills = [];
 fetchData().then(data => {
+    allSkills = data;
     showSkills(data);
+    initializeSkillFilters(data);
 });
 
 fetchData("projects").then(data => {
