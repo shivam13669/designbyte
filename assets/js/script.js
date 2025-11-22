@@ -253,13 +253,9 @@ function sortExperienceByDate() {
 function extractDate(container) {
     const descText = container.querySelector('.desc p').textContent.trim();
     const dateRanges = descText.split(' - ');
-    const endDate = dateRanges[1].trim();
+    const startDate = dateRanges[0].trim();
 
-    if (endDate === 'Present') {
-        return new Date().getTime();
-    }
-
-    const monthYear = endDate.split(' ');
+    const monthYear = startDate.split(' ');
     const monthStr = monthYear[0];
     const year = parseInt(monthYear[1]);
 
