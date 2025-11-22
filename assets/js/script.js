@@ -81,10 +81,18 @@ async function fetchData(type = "skills") {
     return data;
 }
 
-function showSkills(skills) {
+let allSkills = [];
+
+function showSkills(skills, filterCategory = 'all') {
     let skillsContainer = document.getElementById("skillsContainer");
     let skillHTML = "";
-    skills.forEach(skill => {
+
+    let filteredSkills = skills;
+    if (filterCategory !== 'all') {
+        filteredSkills = skills.filter(skill => skill.category === filterCategory);
+    }
+
+    filteredSkills.forEach(skill => {
         skillHTML += `
         <div class="bar">
               <div class="info">
@@ -94,6 +102,20 @@ function showSkills(skills) {
             </div>`
     });
     skillsContainer.innerHTML = skillHTML;
+}
+
+function setupSkillFilters() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filterCategory = this.getAttribute('data-filter');
+
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            showSkills(allSkills, filterCategory);
+        });
+    });
 }
 
 function showProjects(projects) {
@@ -141,7 +163,9 @@ function showProjects(projects) {
 }
 
 fetchData().then(data => {
+    allSkills = data;
     showSkills(data);
+    setupSkillFilters();
 });
 
 fetchData("projects").then(data => {
