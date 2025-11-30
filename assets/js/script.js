@@ -54,6 +54,18 @@ $(document).ready(function () {
     });
     // <!-- emailjs to mail contact form data -->
 
+    // <!-- typed js effect starts -->
+    if (document.querySelector(".typing-text")) {
+        var typed = new Typed(".typing-text", {
+            strings: ["Frontend Development", "Backend Development", "Web Designing", "Android Development", "Web Development"],
+            loop: true,
+            typeSpeed: 50,
+            backSpeed: 25,
+            backDelay: 500,
+        });
+    }
+    // <!-- typed js effect ends -->
+
     /* Sort experience by date (latest first) */
     sortExperienceByDate();
 
