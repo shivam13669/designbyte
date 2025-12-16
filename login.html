@@ -17,7 +17,7 @@
         .login-page-section {
             background: linear-gradient(135deg, #e5ecfb 0%, #f0f4ff 100%);
             min-height: 100vh;
-            padding: 3rem 9% 2rem 9%;
+            padding: 4rem 5% 4rem 5%;
             margin-top: 6.5rem;
             display: flex;
             align-items: center;
@@ -26,18 +26,18 @@
 
         .login-page-wrapper {
             width: 100%;
-            max-width: 450px;
+            max-width: 700px;
         }
 
         .login-page-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3.5rem;
         }
 
         .login-page-header h1 {
-            font-size: 2.5rem;
+            font-size: 4rem;
             color: #020133;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             font-weight: 800;
             background: linear-gradient(135deg, #011aff, #020133);
             -webkit-background-clip: text;
@@ -45,25 +45,25 @@
         }
 
         .login-page-header p {
-            font-size: 1.1rem;
+            font-size: 1.6rem;
             color: #666;
         }
 
         .login-page-card {
             background: #fff;
-            border-radius: 1rem;
-            padding: 3rem 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 1.5rem;
+            padding: 4rem 3rem;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
         }
 
         .login-page-form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
         }
 
         .login-page-form-group label {
             display: block;
-            margin-bottom: 0.7rem;
-            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
             color: #020133;
             font-weight: 600;
             letter-spacing: 0.04rem;
@@ -71,10 +71,10 @@
 
         .login-page-form-group input {
             width: 100%;
-            padding: 0.9rem 1.2rem;
-            font-size: 1rem;
+            padding: 1.2rem 1.8rem;
+            font-size: 1.3rem;
             border: 2px solid #ddd;
-            border-radius: 0.6rem;
+            border-radius: 0.8rem;
             transition: 0.3s;
             box-sizing: border-box;
             color: #0e2431;
@@ -83,49 +83,50 @@
         .login-page-form-group input:focus {
             outline: none;
             border-color: #011aff;
-            box-shadow: 0 0 0 4px rgba(1, 26, 255, 0.1);
+            box-shadow: 0 0 0 6px rgba(1, 26, 255, 0.1);
         }
 
         .login-page-form-group input::placeholder {
             color: #999;
+            font-size: 1.3rem;
         }
 
         .login-page-error {
             color: #e74c3c;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             text-align: center;
-            min-height: 1.5rem;
+            min-height: 2rem;
             font-weight: 500;
         }
 
         .login-page-submit-btn {
             width: 100%;
-            padding: 1rem;
+            padding: 1.5rem;
             background: linear-gradient(135deg, #011aff, #0015cc);
             color: #fff;
             border: none;
-            border-radius: 0.6rem;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 0.8rem;
+            font-size: 1.5rem;
+            font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
             letter-spacing: 0.04rem;
         }
 
         .login-page-submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(1, 26, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(1, 26, 255, 0.35);
         }
 
         .login-page-submit-btn:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
         }
 
         .login-page-footer-link {
             text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.95rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
             color: #666;
         }
 
@@ -147,17 +148,34 @@
                 margin-top: 6.5rem;
             }
 
+            .login-page-wrapper {
+                max-width: 100%;
+            }
+
             .login-page-card {
-                padding: 2rem 1.5rem;
+                padding: 2.5rem 2rem;
             }
 
             .login-page-header h1 {
-                font-size: 2rem;
+                font-size: 2.8rem;
+            }
+
+            .login-page-header p {
+                font-size: 1.2rem;
+            }
+
+            .login-page-form-group label {
+                font-size: 1.2rem;
             }
 
             .login-page-form-group input {
-                padding: 0.8rem 1rem;
-                font-size: 16px;
+                padding: 1rem 1.5rem;
+                font-size: 1.2rem;
+            }
+
+            .login-page-submit-btn {
+                padding: 1.2rem;
+                font-size: 1.3rem;
             }
         }
     </style>
