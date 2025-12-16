@@ -219,6 +219,57 @@ fetchData("projects").then(data => {
     showProjects(data);
 });
 
+async function fetchCourses() {
+    const response = await fetch("./courses/courses.json");
+    const data = await response.json();
+    return data;
+}
+
+function showCourses(courses) {
+    const coursesContainer = document.getElementById("coursesContainer");
+    let courseHTML = "";
+
+    courses.slice(0, 3).forEach(course => {
+        courseHTML += `
+        <div class="course-card">
+            <img src="${course.image}" alt="${course.name}" class="course-image" draggable="false">
+            <div class="course-content">
+                <div class="course-header">
+                    <h3 class="course-title">${course.name}</h3>
+                    <p class="course-instructor">${course.instructor}</p>
+                    <p class="course-desc">${course.shortDesc}</p>
+                </div>
+                <div class="course-meta">
+                    <div>
+                        <div class="course-price">${course.price}</div>
+                        <div class="course-duration">${course.duration}</div>
+                    </div>
+                    <div class="course-rating">
+                        <span class="stars">★ ${course.rating}</span>
+                        <span class="reviews">(${course.reviews})</span>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    coursesContainer.innerHTML = courseHTML;
+
+    if (typeof ScrollReveal !== 'undefined') {
+        const srtop = ScrollReveal({
+            origin: 'top',
+            distance: '80px',
+            duration: 1000,
+            reset: true
+        });
+        srtop.reveal('.courses .course-card', { interval: 200 });
+    }
+}
+
+fetchCourses().then(data => {
+    showCourses(data);
+});
+
 // <!-- tilt js effect starts -->
 if (typeof VanillaTilt !== 'undefined') {
     VanillaTilt.init(document.querySelectorAll(".tilt"), {
