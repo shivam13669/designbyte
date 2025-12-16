@@ -19,7 +19,22 @@ $(document).ready(function () {
   // smooth scrolling - only for links that exist on this page
   $('a[href*="#"]').on('click', function (e) {
     const href = $(this).attr('href');
-    const targetElement = $(href);
+
+    // Extract the hash part from href (handle both #anchor and /#anchor formats)
+    let anchorId;
+    if (href.includes('/#')) {
+      anchorId = href.split('/#')[1];
+    } else if (href.startsWith('#')) {
+      anchorId = href.substring(1);
+    } else {
+      return;
+    }
+
+    if (!anchorId) {
+      return;
+    }
+
+    const targetElement = $('#' + anchorId);
 
     if (targetElement.length) {
       e.preventDefault();
