@@ -15,26 +15,69 @@ $(document).ready(function () {
             document.querySelector('#scroll-top').classList.remove('active');
         }
 
-        // scroll spy
-        $('section').each(function () {
-            let height = $(this).height();
-            let offset = $(this).offset().top - 200;
-            let top = $(window).scrollTop();
-            let id = $(this).attr('id');
+        // scroll spy - use native JavaScript to avoid jQuery selector issues
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.navbar a');
 
-            if (top > offset && top < offset + height) {
-                $('.navbar ul li a').removeClass('active');
-                $('.navbar').find(`[href="#${id}"]`).addClass('active');
+        sections.forEach(section => {
+            const height = section.offsetHeight;
+            const offset = section.offsetTop - 200;
+            const top = window.scrollY;
+            const id = section.getAttribute('id');
+
+            if (id && top > offset && top < offset + height) {
+                // Remove active from all links
+                navLinks.forEach(link => link.classList.remove('active'));
+
+                // Add active to matching link(s)
+                navLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href === `#${id}` || href === `/#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
             }
         });
     });
 
-    // smooth scrolling
-    $('a[href*="#"]').on('click', function (e) {
-        e.preventDefault();
-        $('html, body').animate({
-            scrollTop: $($(this).attr('href')).offset().top,
-        }, 500, 'linear')
+    // smooth scrolling - use native JavaScript only
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href*="#"]');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+
+        // Skip if href is just "#" or doesn't contain valid anchor
+        if (!href || href === '#') {
+            return;
+        }
+
+        // Extract anchor from href (e.g., "#about" from "/#about")
+        let anchorId;
+        if (href.includes('/#')) {
+            anchorId = href.split('/#')[1];
+        } else if (href.startsWith('#')) {
+            anchorId = href.substring(1);
+        } else {
+            return;
+        }
+
+        // Only proceed if we have a valid anchor
+        if (!anchorId) {
+            return;
+        }
+
+        const targetElement = document.getElementById(anchorId);
+
+        // Check if target element exists on current page
+        if (targetElement) {
+            e.preventDefault();
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (href.startsWith('/#')) {
+            // If link is to home anchor (e.g., /#about), redirect to home first
+            e.preventDefault();
+            window.location.href = href;
+        }
     });
 
     // <!-- emailjs to mail contact form data -->

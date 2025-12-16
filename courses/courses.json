@@ -51,7 +51,7 @@
   {
     "id": 2,
     "name": "React Advanced Mastery",
-    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+    "image": "https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=400&h=300&fit=crop",
     "instructor": "By React Expert",
     "price": "₹2,999",
     "duration": "8 Weeks",
@@ -96,7 +96,7 @@
   {
     "id": 3,
     "name": "Node.js Backend Development",
-    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+    "image": "https://images.unsplash.com/photo-1627817051212-432c081dd017?w=400&h=300&fit=crop",
     "instructor": "By Backend Specialist",
     "price": "₹3,499",
     "duration": "10 Weeks",
@@ -186,7 +186,7 @@
   {
     "id": 5,
     "name": "Web Development with Tailwind CSS",
-    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+    "image": "https://images.unsplash.com/photo-1517694712612-f8e37df4e58f?w=400&h=300&fit=crop",
     "instructor": "By CSS Specialist",
     "price": "₹1,999",
     "duration": "6 Weeks",
