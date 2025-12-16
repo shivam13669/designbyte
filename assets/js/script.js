@@ -15,18 +15,27 @@ $(document).ready(function () {
             document.querySelector('#scroll-top').classList.remove('active');
         }
 
-        // scroll spy
-        $('section').each(function () {
-            let height = $(this).height();
-            let offset = $(this).offset().top - 200;
-            let top = $(window).scrollTop();
-            let id = $(this).attr('id');
+        // scroll spy - use native JavaScript to avoid jQuery selector issues
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.navbar a');
+
+        sections.forEach(section => {
+            const height = section.offsetHeight;
+            const offset = section.offsetTop - 200;
+            const top = window.scrollY;
+            const id = section.getAttribute('id');
 
             if (id && top > offset && top < offset + height) {
-                $('.navbar ul li a').removeClass('active');
-                // Use attribute selector with proper escaping for jQuery
-                const escapedId = id.replace(/[!"#$%&'()*+,.\/:;?@[\\\]^`{|}~]/g, '\\$&');
-                $('.navbar').find(`a[href="#${escapedId}"], a[href="/#${escapedId}"]`).addClass('active');
+                // Remove active from all links
+                navLinks.forEach(link => link.classList.remove('active'));
+
+                // Add active to matching link(s)
+                navLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href === `#${id}` || href === `/#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
             }
         });
     });
