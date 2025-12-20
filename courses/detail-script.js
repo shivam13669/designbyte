@@ -64,7 +64,7 @@ function loadCourseDetail() {
 function displayCourseDetail(course) {
   const stars = '★'.repeat(Math.floor(course.rating)) + '☆'.repeat(5 - Math.floor(course.rating));
 
-  document.title = `${course.name} | Portfolio Shivam`;
+  document.title = `${course.name} | Design Byte`;
 
   // Safely set element content with existence checks
   const setElementContent = (id, content) => {
