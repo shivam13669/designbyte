@@ -2,19 +2,40 @@
   {
     "id": 1,
     "title": "Video-Based Courses",
-    "description": "Learn through comprehensive video tutorials covering a wide range of topics. From beginner to advanced levels, our video courses are designed to help you master new skills at your own pace.",
-    "image": "https://cdn.builder.io/api/v1/image/assets%2Fb6284bf5eeb0478fb10276735a4833b8%2F5c2f3d3f3f3f3f3f3f3f3f?format=webp&width=800"
+    "subtitle": "Self-Paced Learning",
+    "description": "Comprehensive Video Tutorials Covering All Major Web Development Topics. Learn At Your Own Pace With Structured Modules And Practical Examples.",
+    "icon": "fas fa-video",
+    "learnings": [
+      "Structured Video Modules",
+      "Step-By-Step Tutorials",
+      "Code Examples & Resources",
+      "Lifetime Access To Content"
+    ]
   },
   {
     "id": 2,
     "title": "Test Series & Skill Assessments",
-    "description": "Evaluate your knowledge with our comprehensive test series and skill assessments. Get detailed feedback on your performance and identify areas for improvement.",
-    "image": "https://cdn.builder.io/api/v1/image/assets%2Fb6284bf5eeb0478fb10276735a4833b8%2F5c2f3d3f3f3f3f3f3f3f3f?format=webp&width=800"
+    "subtitle": "Evaluation & Practice",
+    "description": "Practice With Comprehensive Test Series And Skill Assessments. Evaluate Your Progress And Identify Areas For Improvement With Detailed Feedback.",
+    "icon": "fas fa-clipboard-list",
+    "learnings": [
+      "Multiple Mock Tests",
+      "Difficulty-Based Practice",
+      "Detailed Performance Analysis",
+      "Skill Level Certification"
+    ]
   },
   {
     "id": 3,
     "title": "Project Mentorship",
-    "description": "Get personalized guidance from experienced mentors on your projects. Learn best practices, improve your code quality, and accelerate your development journey.",
-    "image": "https://cdn.builder.io/api/v1/image/assets%2Fb6284bf5eeb0478fb10276735a4833b8%2F5c2f3d3f3f3f3f3f3f3f3f?format=webp&width=800"
+    "subtitle": "Professional Guidance",
+    "description": "Get Personalized Mentorship For Your Projects. Expert Guidance From Concept To Completion With Code Reviews, Best Practices, And Real-Time Feedback.",
+    "icon": "fas fa-handshake",
+    "learnings": [
+      "One-On-One Project Guidance",
+      "Code Review & Feedback",
+      "Best Practices & Optimization",
+      "Career Mentorship Included"
+    ]
   }
 ]
