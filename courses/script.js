@@ -85,16 +85,17 @@ function displayCourses(courses) {
 
           <p class="course-card-description">${course.shortDesc}</p>
 
-          <div class="course-card-footer">
-            <div class="course-card-price-section">
-              <span class="course-card-price">${course.price}</span>
-              <span class="course-card-duration">
-                <i class="fas fa-clock"></i> ${course.duration}
-              </span>
-            </div>
+        </div>
+
+        <div class="course-card-footer">
+          <button class="course-card-btn" onclick="event.stopPropagation(); navigateToCourseDetail(${course.id})">Course Preview</button>
+          <div class="course-card-price-section">
+            <span class="course-card-price">${course.price}</span>
+            <span class="course-card-duration">
+              <i class="fas fa-clock"></i> ${course.duration}
+            </span>
           </div>
         </div>
-        <button class="course-card-btn" onclick="event.stopPropagation(); navigateToCourseDetail(${course.id})">Course Preview</button>
       </div>
     `;
   });
