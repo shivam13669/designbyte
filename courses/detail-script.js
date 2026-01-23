@@ -178,6 +178,83 @@ function resetPaymentModal() {
   clearFormErrors();
 }
 
+// Show gateway selection view
+function showGatewaySelection() {
+  document.getElementById('gatewaySelectionView').style.display = 'block';
+  document.getElementById('customerDetailsView').style.display = 'none';
+}
+
+// Show customer details form
+function showCustomerDetailsForm() {
+  document.getElementById('gatewaySelectionView').style.display = 'none';
+  document.getElementById('customerDetailsView').style.display = 'block';
+}
+
+// Back to gateway selection
+function backToGatewaySelection() {
+  showGatewaySelection();
+  document.getElementById('customerForm').reset();
+  clearFormErrors();
+}
+
+// Clear form error messages
+function clearFormErrors() {
+  document.getElementById('nameError').textContent = '';
+  document.getElementById('emailError').textContent = '';
+  document.getElementById('phoneError').textContent = '';
+}
+
+// Validate customer form
+function validateCustomerForm() {
+  clearFormErrors();
+  const name = document.getElementById('customerName').value.trim();
+  const email = document.getElementById('customerEmail').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  let isValid = true;
+
+  if (!name || name.length < 3) {
+    document.getElementById('nameError').textContent = 'Please enter a valid name (minimum 3 characters)';
+    isValid = false;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    document.getElementById('emailError').textContent = 'Please enter a valid email address';
+    isValid = false;
+  }
+
+  const phoneRegex = /^[6-9]\d{9}$/;
+  if (!phone || !phoneRegex.test(phone)) {
+    document.getElementById('phoneError').textContent = 'Please enter a valid 10-digit phone number';
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+// Get customer details from form
+function getCustomerDetailsFromForm() {
+  return {
+    name: document.getElementById('customerName').value.trim(),
+    email: document.getElementById('customerEmail').value.trim(),
+    phone: document.getElementById('customerPhone').value.trim()
+  };
+}
+
+// Form submission
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('customerForm');
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (validateCustomerForm()) {
+        const customerDetails = getCustomerDetailsFromForm();
+        proceedToPaymentGateway(customerDetails);
+      }
+    });
+  }
+});
+
 // Close modal when clicking outside
 document.addEventListener('click', function(event) {
   const overlay = document.getElementById('paymentModalOverlay');
