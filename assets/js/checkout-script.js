@@ -30,6 +30,7 @@ $(document).ready(function () {
   });
 
   loadCheckoutData();
+  setupFormHandlers();
 });
 
 function getCourseIdFromUrl() {
@@ -80,56 +81,89 @@ function displayCheckoutData(course) {
   document.getElementById('courseSummaryDuration').textContent = course.duration;
   document.getElementById('summaryPrice').textContent = course.price;
   document.getElementById('summaryTotal').textContent = course.price;
+  document.getElementById('payAmount').textContent = course.price;
 }
 
-// Store current payment context
-let currentPaymentGateway = null;
+function setupFormHandlers() {
+  const form = document.getElementById('checkoutForm');
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      await handleCheckoutSubmit();
+    });
+  }
+}
 
-// Select payment gateway and show customer form
-function selectPaymentGateway(gateway) {
+async function handleCheckoutSubmit() {
   if (!window.currentCourseForPayment) {
     showPaymentStatus('error', 'Course Not Found', 'Course information was not found. Please try again.');
     return;
   }
 
-  currentPaymentGateway = gateway;
-  showCustomerDetailsForm();
+  // Validate form
+  if (!validateCheckoutForm()) {
+    return;
+  }
+
+  // Get form data
+  const name = document.getElementById('customerName').value.trim();
+  const email = document.getElementById('customerEmail').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const gateway = document.querySelector('input[name="paymentGateway"]:checked').value;
+
+  const customerDetails = { name, email, phone };
+
+  try {
+    showPaymentStatus('pending', 'Processing Payment', 'Please wait while we initialize your payment...');
+
+    // Get course price
+    const priceText = window.currentCourseForPayment.price;
+    const amount = parseFloat(priceText.replace('₹', '').trim());
+
+    // Store for later verification
+    localStorage.setItem('current_amount', amount);
+    localStorage.setItem('current_customer_email', email);
+
+    // Call backend API to create order
+    const response = await fetch('http://localhost:5000/api/payment/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount: amount,
+        gateway: gateway,
+        customer: customerDetails,
+        description: `Payment for ${window.currentCourseForPayment.name}`
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.error || 'Failed to create order');
+    }
+
+    // Handle different gateways
+    handleGatewayPayment(gateway, data.order, amount, customerDetails);
+
+  } catch (error) {
+    console.error('Payment error:', error);
+    showPaymentStatus('error', 'Payment Initialization Failed', error.message);
+  }
 }
 
-// Show gateway selection view
-function showGatewaySelection() {
-  document.getElementById('gatewaySelectionView').style.display = 'block';
-  document.getElementById('customerDetailsView').style.display = 'none';
-}
-
-// Show customer details form
-function showCustomerDetailsForm() {
-  document.getElementById('gatewaySelectionView').style.display = 'none';
-  document.getElementById('customerDetailsView').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Back to gateway selection
-function backToGatewaySelection() {
-  showGatewaySelection();
-  document.getElementById('customerForm').reset();
-  clearFormErrors();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Clear form error messages
-function clearFormErrors() {
-  document.getElementById('nameError').textContent = '';
-  document.getElementById('emailError').textContent = '';
-  document.getElementById('phoneError').textContent = '';
-}
-
-// Validate customer form
-function validateCustomerForm() {
+function validateCheckoutForm() {
   clearFormErrors();
   const name = document.getElementById('customerName').value.trim();
   const email = document.getElementById('customerEmail').value.trim();
   const phone = document.getElementById('customerPhone').value.trim();
+  const gateway = document.querySelector('input[name="paymentGateway"]:checked');
+  
   let isValid = true;
 
   if (!name || name.length < 3) {
@@ -149,81 +183,18 @@ function validateCustomerForm() {
     isValid = false;
   }
 
+  if (!gateway) {
+    showPaymentStatus('error', 'Payment Method Required', 'Please select a payment method');
+    isValid = false;
+  }
+
   return isValid;
 }
 
-// Get customer details from form
-function getCustomerDetailsFromForm() {
-  return {
-    name: document.getElementById('customerName').value.trim(),
-    email: document.getElementById('customerEmail').value.trim(),
-    phone: document.getElementById('customerPhone').value.trim()
-  };
-}
-
-// Form submission
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('customerForm');
-  if (form) {
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      if (validateCustomerForm()) {
-        const customerDetails = getCustomerDetailsFromForm();
-        proceedToPaymentGateway(customerDetails);
-      }
-    });
-  }
-});
-
-// Proceed to payment gateway with customer details
-async function proceedToPaymentGateway(customerDetails) {
-  if (!window.currentCourseForPayment || !currentPaymentGateway) {
-    showPaymentStatus('error', 'Payment Error', 'Payment initialization failed. Please try again.');
-    return;
-  }
-
-  try {
-    showPaymentStatus('pending', 'Processing Payment', 'Please wait while we initialize your payment...');
-
-    // Get course price
-    const priceText = window.currentCourseForPayment.price;
-    const amount = parseFloat(priceText.replace('₹', '').trim());
-
-    // Store for later verification
-    localStorage.setItem('current_amount', amount);
-    localStorage.setItem('current_customer_email', customerDetails.email);
-
-    // Call backend API to create order
-    const response = await fetch('http://localhost:5000/api/payment/create-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        amount: amount,
-        gateway: currentPaymentGateway,
-        customer: customerDetails,
-        description: `Payment for ${window.currentCourseForPayment.name}`
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (!data.success) {
-      throw new Error(data.error || 'Failed to create order');
-    }
-
-    // Handle different gateways
-    handleGatewayPayment(currentPaymentGateway, data.order, amount, customerDetails);
-
-  } catch (error) {
-    console.error('Payment error:', error);
-    showPaymentStatus('error', 'Payment Initialization Failed', error.message);
-  }
+function clearFormErrors() {
+  document.getElementById('nameError').textContent = '';
+  document.getElementById('emailError').textContent = '';
+  document.getElementById('phoneError').textContent = '';
 }
 
 function handleGatewayPayment(gateway, order, amount, customer) {
@@ -406,7 +377,6 @@ function showPaymentStatus(type, title, message, details = null) {
 function closePaymentStatus() {
   const overlay = document.getElementById('paymentStatusOverlay');
   overlay.classList.remove('active');
-  showGatewaySelection();
 }
 
 function showPaymentSuccess(gateway, paymentData) {
