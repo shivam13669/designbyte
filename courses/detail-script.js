@@ -432,11 +432,13 @@ function handlePhonePePayment(order) {
     // Store transaction ID for later verification
     localStorage.setItem('phonepe_transaction_id', order.transactionId);
     localStorage.setItem('phonepe_amount', localStorage.getItem('current_amount'));
+    localStorage.setItem('phonepe_order_id', order.orderId);
+    localStorage.setItem('payment_gateway', 'phonepe');
 
-    // Redirect to PhonePe
+    // Redirect to PhonePe - backend will handle return_url callback
     window.location.href = order.redirectUrl;
   } else {
-    alert('Failed to get PhonePe payment URL');
+    showPaymentStatus('error', 'Payment Gateway Error', 'Failed to initialize PhonePe payment. Please try again.');
   }
 }
 
@@ -444,32 +446,96 @@ function handleCashfreePayment(order) {
   if (order.paymentLink) {
     // Store order ID for later verification
     localStorage.setItem('cashfree_order_id', order.orderId);
+    localStorage.setItem('payment_gateway', 'cashfree');
 
-    // Redirect to Cashfree
+    // Redirect to Cashfree - backend will handle return_url callback
     window.location.href = order.paymentLink;
   } else {
-    alert('Failed to get Cashfree payment link');
+    showPaymentStatus('error', 'Payment Gateway Error', 'Failed to initialize Cashfree payment. Please try again.');
   }
 }
 
-function showPaymentSuccess(gateway, paymentData) {
-  const message = `
-✅ Payment Successful!
+// Show payment status modal
+function showPaymentStatus(type, title, message, details = null) {
+  const overlay = document.getElementById('paymentStatusOverlay');
+  const statusContent = document.getElementById('statusContent');
 
-Gateway: ${gateway}
-Amount: ₹${paymentData.amount}
-Status: ${paymentData.status}
+  let html = '<div class="status-header">';
 
-You will be enrolled in the course shortly.
-Check your email for further instructions.
+  if (type === 'success') {
+    html += '<div class="status-icon success">✓</div>';
+  } else if (type === 'error') {
+    html += '<div class="status-icon error">✕</div>';
+  } else if (type === 'pending') {
+    html += '<div class="status-spinner"></div>';
+  }
+
+  html += `
+    <h2 class="status-title">${title}</h2>
+    <p class="status-message">${message}</p>
   `;
 
-  alert(message);
+  if (details) {
+    html += '<div class="status-details">';
+    Object.entries(details).forEach(([key, value]) => {
+      html += `
+        <div class="status-detail-item">
+          <span class="status-detail-label">${key}:</span>
+          <span class="status-detail-value">${value}</span>
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
 
-  // Redirect to courses page after 2 seconds
+  html += '<div class="status-actions">';
+
+  if (type === 'success') {
+    html += `
+      <button class="btn-status-action btn-status-primary" onclick="window.location.href='/courses'">
+        Back to Courses
+      </button>
+    `;
+  } else if (type === 'error') {
+    html += `
+      <button class="btn-status-action btn-status-primary" onclick="closePaymentStatus()">
+        Try Again
+      </button>
+      <button class="btn-status-action btn-status-secondary" onclick="window.location.href='/courses'">
+        Back to Courses
+      </button>
+    `;
+  } else if (type === 'pending') {
+    html += '<p style="color: #666; font-size: 1.4rem; margin-top: 1rem;">This may take a few moments...</p>';
+  }
+
+  html += '</div></div>';
+
+  statusContent.innerHTML = html;
+  overlay.classList.add('active');
+}
+
+function closePaymentStatus() {
+  const overlay = document.getElementById('paymentStatusOverlay');
+  overlay.classList.remove('active');
+  openPaymentModal();
+}
+
+function showPaymentSuccess(gateway, paymentData) {
+  const details = {
+    'Gateway': gateway,
+    'Amount': `₹${paymentData.amount}`,
+    'Status': paymentData.status
+  };
+
+  showPaymentStatus('success', 'Payment Successful!',
+    'Your payment has been confirmed. You will be enrolled in the course shortly. Check your email for further instructions.',
+    details);
+
+  // Redirect to courses page after 3 seconds
   setTimeout(() => {
     window.location.href = '/courses';
-  }, 2000);
+  }, 3000);
 }
 
 // Disable developer mode
