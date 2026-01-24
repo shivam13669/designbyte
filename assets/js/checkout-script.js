@@ -293,41 +293,13 @@ async function handleCheckoutSubmit() {
 }
 
 function validateCheckoutForm() {
-  const name = document.getElementById('customerName').value.trim();
-  const email = document.getElementById('customerEmail').value.trim();
-  const phone = document.getElementById('customerPhone').value.trim();
-  const gateway = window.selectedGateway;
-  
-  let isValid = true;
-  let errorMessage = '';
+  // Revalidate all fields before submission
+  const isNameValid = validateName();
+  const isEmailValid = validateEmail();
+  const isPhoneValid = validatePhone();
+  const isGatewayValid = validateGateway();
 
-  if (!name || name.length < 3) {
-    errorMessage += 'Please enter a valid name (minimum 3 characters)\n';
-    isValid = false;
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email || !emailRegex.test(email)) {
-    errorMessage += 'Please enter a valid email address\n';
-    isValid = false;
-  }
-
-  const phoneRegex = /^[6-9]\d{9}$/;
-  if (!phone || !phoneRegex.test(phone)) {
-    errorMessage += 'Please enter a valid 10-digit phone number\n';
-    isValid = false;
-  }
-
-  if (!gateway) {
-    errorMessage += 'Please select a payment method\n';
-    isValid = false;
-  }
-
-  if (!isValid) {
-    alert(errorMessage.trim());
-  }
-
-  return isValid;
+  return isNameValid && isEmailValid && isPhoneValid && isGatewayValid;
 }
 
 function handleGatewayPayment(gateway, order, amount, customer) {
