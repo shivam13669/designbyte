@@ -149,6 +149,10 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: Inter, system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .pay-btn:hover {
