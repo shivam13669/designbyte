@@ -110,7 +110,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.25s ease;
-  min-height: 72px;
+  min-height: 120px;
 }
 
 .method img {
