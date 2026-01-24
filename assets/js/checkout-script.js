@@ -52,6 +52,9 @@ function displayCheckoutData(course) {
   document.getElementById('courseSummaryInstructor').textContent = course.instructor;
   document.getElementById('courseSummaryDuration').textContent = course.duration;
   document.getElementById('summaryTotal').textContent = course.price;
+
+  // Show price in the button
+  document.getElementById('btnPrice').textContent = course.price;
 }
 
 function setupFormHandlers() {
