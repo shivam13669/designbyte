@@ -63,6 +63,20 @@ function setupFormHandlers() {
       e.preventDefault();
       await handleCheckoutSubmit();
     });
+
+    // Real-time validation listeners
+    const nameInput = document.getElementById('customerName');
+    const emailInput = document.getElementById('customerEmail');
+    const phoneInput = document.getElementById('customerPhone');
+
+    nameInput.addEventListener('blur', validateNameField);
+    nameInput.addEventListener('input', validateNameField);
+
+    emailInput.addEventListener('blur', validateEmailField);
+    emailInput.addEventListener('input', validateEmailField);
+
+    phoneInput.addEventListener('blur', validatePhoneField);
+    phoneInput.addEventListener('input', validatePhoneField);
   }
 }
 
