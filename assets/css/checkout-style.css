@@ -102,8 +102,8 @@ body {
 
 .method {
   border: 2px solid #e5e7eb;
-  padding: 20px;
-  border-radius: 14px;
+  padding: 12px;
+  border-radius: 16px;
   cursor: pointer;
   background: #fafafa;
   display: flex;
@@ -112,15 +112,16 @@ body {
   transition: all 0.25s ease;
   height: 72px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .method img {
-  width: 32px;
-  height: 32px;
+  max-width: 140px;
+  max-height: 40px;
+  width: auto;
+  height: auto;
   object-fit: contain;
   filter: grayscale(0%);
-  max-width: 32px;
-  max-height: 32px;
 }
 
 .method:hover {
