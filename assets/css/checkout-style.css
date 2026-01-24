@@ -519,12 +519,12 @@ hr {
 
   .method {
     padding: 12px;
-    min-height: 130px;
+    min-height: 70px;
   }
 
   .method img {
-    max-width: 85%;
-    max-height: 85%;
+    width: 100%;
+    height: 100%;
   }
 
   .pay-btn {
