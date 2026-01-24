@@ -114,7 +114,8 @@ body {
 }
 
 .method img {
-  height: 40px;
+  max-width: 110px;
+  max-height: 30px;
   object-fit: contain;
   filter: grayscale(0%);
 }
