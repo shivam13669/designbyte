@@ -88,13 +88,22 @@ export const createCashfreeOrder = async (params) => {
       currency: response.data?.order_currency,
     };
   } catch (error) {
-    logger.error('Cashfree order creation failed', {
-      error: error.message,
-      response: error.response?.data,
-    });
+    const errorDetails = {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      headers: error.response?.headers,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        headers: error.config?.headers,
+      }
+    };
+    logger.error('Cashfree order creation failed', JSON.stringify(errorDetails, null, 2));
     throw {
       message: 'Failed to create Cashfree order',
       error: error.message,
+      details: errorDetails,
     };
   }
 };

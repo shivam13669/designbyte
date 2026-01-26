@@ -75,13 +75,17 @@ const getAccessToken = async () => {
 
     return access_token;
   } catch (error) {
-    logger.error('Failed to generate PhonePe OAuth token', {
-      error: error.message,
-      response: error.response?.data,
-    });
+    const errorDetails = {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      headers: error.response?.headers,
+    };
+    logger.error('Failed to generate PhonePe OAuth token', JSON.stringify(errorDetails, null, 2));
     throw {
       message: 'Failed to authenticate with PhonePe',
       error: error.message,
+      details: errorDetails,
     };
   }
 };
@@ -136,13 +140,21 @@ export const createPhonePeOrder = async (params) => {
     // Return PhonePe response directly
     return response.data;
   } catch (error) {
-    logger.error('PhonePe order creation failed', {
-      error: error.message,
-      response: error.response?.data,
-    });
+    const errorDetails = {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      headers: error.response?.headers,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+      }
+    };
+    logger.error('PhonePe order creation failed', JSON.stringify(errorDetails, null, 2));
     throw {
       message: 'Failed to create PhonePe order',
       error: error.message,
+      details: errorDetails,
     };
   }
 };
@@ -180,14 +192,18 @@ export const checkPhonePeTransactionStatus = async (orderId) => {
     // Return PhonePe response directly
     return response.data;
   } catch (error) {
-    logger.error('PhonePe transaction status check failed', {
+    const errorDetails = {
       orderId,
-      error: error.message,
-      response: error.response?.data,
-    });
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      headers: error.response?.headers,
+    };
+    logger.error('PhonePe transaction status check failed', JSON.stringify(errorDetails, null, 2));
     throw {
       message: 'Failed to check PhonePe transaction status',
       error: error.message,
+      details: errorDetails,
     };
   }
 };
