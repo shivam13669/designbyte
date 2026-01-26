@@ -50,6 +50,10 @@ const getAccessToken = async () => {
     });
 
     // Request new token using form-body (not Basic Auth)
+    logger.info('Requesting PhonePe OAuth token', {
+      endpoint: 'https://api.phonepe.com/apis/identity-manager/v1/oauth/token'
+    });
+
     const response = await axios.post(
       'https://api.phonepe.com/apis/identity-manager/v1/oauth/token',
       new URLSearchParams({
@@ -65,9 +69,16 @@ const getAccessToken = async () => {
       }
     );
 
+    logger.info('PhonePe OAuth token response received', {
+      status: response.status,
+      hasAccessToken: !!response.data?.access_token,
+      expiresIn: response.data?.expires_in
+    });
+
     const { access_token, expires_in } = response.data;
 
     if (!access_token) {
+      logger.error('No access token in PhonePe response', { response: response.data });
       throw new Error('No access token in response');
     }
 
@@ -80,23 +91,25 @@ const getAccessToken = async () => {
 
     logger.info('PhonePe OAuth token generated successfully', {
       expiresIn: expires_in,
+      cachedUntil: new Date(Date.now() + expiryTime).toISOString()
     });
 
     return access_token;
   } catch (error) {
+    const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message;
     const errorDetails = {
       message: error.message,
       status: error.response?.status,
       data: error.response?.data,
-      headers: error.response?.headers,
       config: {
         url: error.config?.url,
         method: error.config?.method,
-        headers: error.config?.headers
       }
     };
-    logger.error('Failed to generate PhonePe OAuth token', errorDetails);
-    throw new Error(`PhonePe Auth Error: ${error.response?.data?.error || error.message} (Status: ${error.response?.status || 'Unknown'})`);
+
+    logger.error('Failed to generate PhonePe OAuth token', JSON.stringify(errorDetails, null, 2));
+
+    throw new Error(`PhonePe OAuth Error: ${errorMessage} (Status: ${error.response?.status || 'Unknown'}). Response: ${JSON.stringify(error.response?.data)}`);
   }
 };
 
@@ -159,18 +172,22 @@ export const createPhonePeOrder = async (params) => {
     // Return PhonePe response directly
     return response.data;
   } catch (error) {
+    const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message;
     const errorDetails = {
       message: error.message,
       status: error.response?.status,
       data: error.response?.data,
-      headers: error.response?.headers,
       config: {
         url: error.config?.url,
         method: error.config?.method,
+        data: error.config?.data
       }
     };
+
     logger.error('PhonePe order creation failed', JSON.stringify(errorDetails, null, 2));
-    throw new Error(`PhonePe API Error: ${error.message || JSON.stringify(error.response?.data)} (Status: ${error.response?.status || 'Unknown'})`);
+
+    const fullError = `PhonePe Pay API Error: ${errorMessage} (Status: ${error.response?.status || 'Unknown'}). Details: ${JSON.stringify(error.response?.data)}`;
+    throw new Error(fullError);
   }
 };
 

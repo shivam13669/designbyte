@@ -71,11 +71,17 @@ router.post('/create-order', async (req, res) => {
         break;
 
       case 'phonepe':
+        const phonepeOrderId = `order_${Date.now()}`;
+        logger.info('Calling PhonePe gateway', {
+          amount,
+          orderId: phonepeOrderId,
+          customer: customer.email
+        });
         order = await phonepe.createPhonePeOrder({
           amount,
           currency: 'INR',
           customer,
-          orderId: `order_${Date.now()}`,
+          orderId: phonepeOrderId,
         });
         break;
 
