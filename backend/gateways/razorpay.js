@@ -63,10 +63,11 @@ export const createRazorpayOrder = async (params) => {
       razorpayKey: process.env.RAZORPAY_KEY_ID,
     };
   } catch (error) {
-    logger.error('Razorpay order creation failed', { error: error.message });
+    logger.error('Razorpay order creation failed', { error: error.message, stack: error.stack });
     throw {
       message: 'Failed to create Razorpay order',
       error: error.message,
+      details: error.response?.data || error,
     };
   }
 };
