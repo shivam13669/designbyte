@@ -1495,6 +1495,9 @@ form .button-area {
 .footer .credit a {
   color: #ffae00;
 }
+.footer .credit .author-name {
+  color: #ffae00;
+}
 .footer .fa {
   color: #e90606;
   margin: 0 0.3rem;
